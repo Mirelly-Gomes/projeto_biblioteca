@@ -28,15 +28,18 @@ def listar_livros(db:Session = Depends(get_db)):
 
     return livros
 
-# @app.post("/donos", response_model=DonoResponse, status_code=201 )
-# def criar_dono(dono: DonoCreate, db:Session = Depends(get_db)):
-#     dono_existe = db.query(Dono).filter(Dono.cpf == dono.cpf).first()
+@app.post("/admin", response_model=AdminResponse, status_code=201 )
+def criar_admin(admin: AdminCreate, db:Session = Depends(get_db)):
+    admin_criado = db.query(Admin).filter(Admin.email == admin.email).first()
 
-#     if dono_existe:
-#         raise HTTPException(status_code=400, detail="CPF já cadastrado")
+    if admin_criado:
+        raise HTTPException(status_code=400, detail="Credenciais inválidas, tente novamente")
     
-#     novo_dono = Dono(**dono.model_dump())
-#     db.add(novo_dono)
-#     db.commit()
-#     db.refresh(novo_dono)
-#     return novo_dono
+    novo_admin = Admin(**admin.model_dump())
+    db.add(novo_admin)
+    db.commit()
+    db.refresh(novo_admin)
+
+    message = novo_admin.nome
+
+    return message

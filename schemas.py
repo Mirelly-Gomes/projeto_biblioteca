@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
+from datetime import date
 
 # admin
 
@@ -62,12 +63,12 @@ class AutorResponse(BaseModel):
 class EmprestimoCreated(BaseModel):
     livro_id: int
     usuario_id: int
-    data_retirada: str  
-    data_devolucao: str
+    data_retirada: date 
+    data_devolucao: date
 
 class EmprestimoUpdate(BaseModel):
-    data_retirada: Optional[str] = None   
-    data_devolucao: Optional[str] = None
+    data_retirada: Optional[date] = None   
+    data_devolucao: Optional[date] = None
 
 class EmprestimoResponse(BaseModel):
     livro_id: int
