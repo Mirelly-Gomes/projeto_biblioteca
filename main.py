@@ -57,3 +57,13 @@ def atualizar_admin(admin_id: int, admin_model:AdminUpdate, db: Session = Depend
     db.commit()
     db.refresh(admin)
     return admin
+
+@app.delete("/admin/{admin_id}",status_code=204)
+def deletar_admin(admin_id: int, db: Session = Depends(get_db)):
+    admin = db.query(admin).filter(admin.id == admin_id).first()
+    if not admin:
+        raise HTTPException(status_code=404, detail="admin não encontrado")
+
+    db.delete(admin)
+    db.commit()
+    return None
