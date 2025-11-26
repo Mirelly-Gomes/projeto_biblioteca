@@ -28,6 +28,7 @@ def listar_livros(db:Session = Depends(get_db)):
 
     return livros
 
+#admin
 @app.post("/admin", response_model=AdminResponse, status_code=201 )
 def criar_admin(admin: AdminCreate, db:Session = Depends(get_db)):
     admin_criado = db.query(Admin).filter(Admin.email == admin.email).first()
@@ -40,6 +41,19 @@ def criar_admin(admin: AdminCreate, db:Session = Depends(get_db)):
     db.commit()
     db.refresh(novo_admin)
 
-    message = novo_admin.nome
+    return novo_admin
 
-    return message
+@app.put("/admin/{admin_id}", response_model= AdminResponse)
+def atualizar_admin(admin_id: int, admin_model:AdminUpdate, db: Session = Depends(get_db)):
+    admin = db.query(Admin).filter(Admin.id == admin_id ).first()
+
+    if not admin:
+        raise HTTPException(status_code=404, detail="Admin não encontrado")
+    
+    dados_atualizado = admin_model.model_dump(exclude_unset=True)
+    for campo, valor in dados_atualizado.items():
+        setattr(admin,campo,valor)
+
+    db.commit()
+    db.refresh(admin)
+    return admin

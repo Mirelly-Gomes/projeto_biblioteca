@@ -11,7 +11,6 @@ class AdminCreate(BaseModel):
 
 class AdminUpdate(BaseModel):
     nome: Optional[str] = None
-    email: Optional[str] = None
     senha: Optional[str] = None
 
 class AdminResponse(BaseModel):
