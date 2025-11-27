@@ -28,7 +28,7 @@ class Favorito(BaseModel):
     livro_id: int
     usuario_id: int
 
-class EditoraCreated(BaseModel):
+class EditoraCreate(BaseModel):
     nome: str
 
 class EditoraUpdate(BaseModel):
@@ -44,7 +44,7 @@ class EditoraResponse(BaseModel):
 
 # autor 
 
-class AutorCreated(BaseModel):
+class AutorCreate(BaseModel):
     nome: str
 
 class AutorUpdate(BaseModel):
@@ -59,7 +59,7 @@ class AutorResponse(BaseModel):
 
 # emprestimo 
 
-class EmprestimoCreated(BaseModel):
+class EmprestimoCreate(BaseModel):
     livro_id: int
     usuario_id: int
     data_retirada: date 
@@ -80,7 +80,7 @@ class EmprestimoResponse(BaseModel):
 
 # usuario
 
-class UsuarioCreated(BaseModel):
+class UsuarioCreate(BaseModel):
     nome: str
     email: str
     senha: str
@@ -101,7 +101,7 @@ class UsuarioResponse(BaseModel):
 
 #livro
 
-class LivroCreated(BaseModel):
+class LivroCreate(BaseModel):
     titulo: str
     autor_id: int
     editora_id: int
