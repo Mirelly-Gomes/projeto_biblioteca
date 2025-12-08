@@ -62,7 +62,7 @@ class Usuario(Base):
 class Livro(Base):
     __tablename__= "livros"
     id = Column(Integer, primary_key=True, index=True)
-    titulo = Column(String, index=True, unique=True nullable=False)
+    titulo = Column(String, index=True, unique=True, nullable=False)
     autor_id = Column(Integer, ForeignKey("autores.id"), nullable=False)
     editora_id = Column(Integer, ForeignKey("editoras.id"), nullable=False)
 
