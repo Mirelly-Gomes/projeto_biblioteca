@@ -24,9 +24,18 @@ class AdminResponse(BaseModel):
 
 # fav e Editora
 
-class Favorito(BaseModel):
-    livro_id: int
+class FavoritoCreate(BaseModel):
     usuario_id: int
+    livro_id: int
+
+class FavoritoResponse(BaseModel):
+    id: int
+    usuario_id: int
+    livro_id: int
+
+    class Config:
+        orm_mode = True
+
 
 class EditoraCreate(BaseModel):
     nome: str
@@ -72,8 +81,8 @@ class EmprestimoUpdate(BaseModel):
 class EmprestimoResponse(BaseModel):
     livro_id: int
     usuario_id: int
-    data_retirada: str  
-    data_devolucao: str
+    data_retirada: date | None = None
+    data_devolucao: date | None = None
 
     class Config:
         from_attributes = True

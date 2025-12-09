@@ -3,15 +3,15 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from database import get_db, engine, Base
-from models import (Admin, Favorito, Editora,
+from models import (Admin, Favorito as FavoritoMl, Editora,
                     Autor,Emprestimo, Usuario, Livro) 
 from schemas import (AdminCreate, AdminUpdate, AdminResponse,
-                    Favorito,EditoraCreate, EditoraUpdate,
+                    EditoraCreate, EditoraUpdate,
                     EditoraResponse, AutorCreate, AutorUpdate,
                     AutorResponse, EmprestimoCreate, EmprestimoUpdate,
                     EmprestimoResponse,UsuarioCreate,UsuarioUpdate,
                     UsuarioResponse, LivroCreate, LivroUpdate, 
-                    LivroResponse)
+                    LivroResponse, FavoritoCreate, FavoritoResponse)
                       
 
 app = FastAPI()
@@ -247,31 +247,34 @@ def deletar_editora(editora_id: int, db: Session = Depends(get_db)):
     
 
 #favoritos
-@app.post("/favoritos", status_code=201)
-def adicionar_favorito(favorito: Favorito, db: Session = Depends(get_db)):
-    ja_existe = db.query(Favorito).filter(
-        Favorito.usuario_id == favorito.usuario_id,
-        Favorito.livro_id == favorito.livro_id
+@app.post("/favoritos", response_model=FavoritoResponse, status_code=201)
+def adicionar_favorito(favorito: FavoritoCreate, db: Session = Depends(get_db)):
+
+    ja_existe = db.query(FavoritoMl).filter(
+        FavoritoMl.usuario_id == favorito.usuario_id,
+        FavoritoMl.livro_id == favorito.livro_id
     ).first()
 
     if ja_existe:
-        raise HTTPException(status_code=400, detail="Livro já está nos favoritos")
+        raise HTTPException(status_code=400, detail="Favorito já existe")
 
-    novo_fav = Favorito(**favorito.model_dump())
-    db.add(novo_fav)
+    novo = FavoritoMl(**favorito.model_dump())
+    db.add(novo)
     db.commit()
-    db.refresh(novo_fav)
-    return novo_fav
+    db.refresh(novo)
+
+    return novo
+
 
 
 @app.get("/favoritos/{usuario_id}")
 def listar_favoritos(usuario_id: int, db: Session = Depends(get_db)):
-    return db.query(Favorito).filter(Favorito.usuario_id == usuario_id).all()
+    return db.query(FavoritoMl).filter(FavoritoMl.usuario_id == usuario_id).all()
 
 
 @app.delete("/favoritos/{favorito_id}", status_code=204)
 def remover_favorito(favorito_id: int, db: Session = Depends(get_db)):
-    favorito = db.query(Favorito).filter(Favorito.id == favorito_id).first()
+    favorito = db.query(FavoritoMl).filter(FavoritoMl.id == favorito_id).first()
 
     if not favorito:
         raise HTTPException(status_code=404, detail="Favorito não encontrado")
